@@ -1,0 +1,7 @@
+{
+  "name": "Real Estate AI",
+  "description": "A conversational voice agent for Real Estate Agency to handle customer interactions for property sales, lead qualification, and site visit scheduling using Gemini's Live API.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
