@@ -1,15 +1,5 @@
 import { UseCase, Language } from "./types";
 
-/** FOREX SALES CONTEXT **/
-const DEMO_RATES = {
-  USD: "₹90.72",
-  AED: "₹24.70",
-  EUR: "₹107.61",
-  GBP: "₹123.76",
-  SGD: "₹71.90",
-  AUD: "₹64.29",
-};
-
 export const USE_CASES: UseCase[] = [
  {
   id: "real_estate_sales_call",
