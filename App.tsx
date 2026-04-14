@@ -155,95 +155,151 @@ const sendEmailFunctionDeclaration = {
 
 // Beautiful Email Body Generator
 function generateEmailBody(customerName: string, propertyDetails: string): string {
+  const today = new Date().toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+  
   return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Property Information</title>
+      <title>Your Dream Property Awaits</title>
     </head>
-    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
-      <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 40px 30px; text-align: center;">
-          <h1 style="margin: 0; color: #1f2937; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
-            Real Estate Agency
-          </h1>
-          <p style="margin: 10px 0 0; color: #4b5563; font-size: 16px; font-weight: 500;">
-            Your Trusted Property Partner
-          </p>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+      <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); border-radius: 20px; overflow: hidden;">
+        
+        <!-- Premium Header with Pattern -->
+        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 50px 40px; text-align: center; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: rgba(255, 255, 255, 0.1); border-radius: 50%;"></div>
+          <div style="position: absolute; bottom: -30px; right: -30px; width: 150px; height: 150px; background: rgba(255, 255, 255, 0.1); border-radius: 50%;"></div>
+          <div style="position: relative; z-index: 1;">
+            <div style="font-size: 48px; margin-bottom: 10px;">🏠</div>
+            <h1 style="margin: 0; color: #ffffff; font-size: 36px; font-weight: 800; letter-spacing: -1px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              Real Estate Agency
+            </h1>
+            <p style="margin: 12px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 18px; font-weight: 500; letter-spacing: 1px;">
+              YOUR TRUSTED PROPERTY PARTNER
+            </p>
+            <div style="margin-top: 20px; display: inline-block; background: rgba(255, 255, 255, 0.2); padding: 8px 20px; border-radius: 30px; backdrop-filter: blur(10px);">
+              <span style="color: #ffffff; font-size: 14px; font-weight: 600;">✨ Premium Properties in Mumbai</span>
+            </div>
+          </div>
         </div>
 
         <!-- Content -->
-        <div style="padding: 40px 30px;">
-          <!-- Greeting -->
-          <div style="margin-bottom: 30px;">
-            <p style="margin: 0; color: #374151; font-size: 18px; line-height: 1.6;">
-              Dear <strong style="color: #f59e0b;">${customerName}</strong>,
+        <div style="padding: 50px 40px;">
+          
+          <!-- Personalized Greeting with Date -->
+          <div style="margin-bottom: 35px;">
+            <p style="margin: 0; color: #9ca3af; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">
+              ${today}
             </p>
-            <p style="margin: 15px 0 0; color: #6b7280; font-size: 16px; line-height: 1.7;">
-              Thank you for your interest in our properties. As discussed, here are the detailed information about the property you're interested in:
+            <p style="margin: 15px 0 0; color: #1f2937; font-size: 20px; line-height: 1.6; font-weight: 600;">
+              Dear <span style="color: #f59e0b; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${customerName}</span>,
+            </p>
+            <p style="margin: 18px 0 0; color: #6b7280; font-size: 16px; line-height: 1.8;">
+              It was wonderful speaking with you! I'm excited to share the property details we discussed. I've personally selected this property based on your preferences, and I believe it could be perfect for you.
             </p>
           </div>
 
-          <!-- Property Details Card -->
-          <div style="background: linear-gradient(to bottom right, #fef3c7, #fde68a); border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 4px solid #f59e0b;">
-            <h2 style="margin: 0 0 15px; color: #1f2937; font-size: 20px; font-weight: 600; display: flex; align-items: center;">
-              <span style="display: inline-block; width: 8px; height: 8px; background-color: #f59e0b; border-radius: 50%; margin-right: 10px;"></span>
-              Property Details
-            </h2>
-            <div style="color: #374151; font-size: 15px; line-height: 1.8; white-space: pre-wrap;">
+          <!-- Property Details Card with Enhanced Design -->
+          <div style="background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%); border-radius: 16px; padding: 35px; margin: 35px 0; border-left: 6px solid #f59e0b; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+              <div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);"></div>
+              <h2 style="margin: 0; color: #1f2937; font-size: 22px; font-weight: 700;">
+                Property Details
+              </h2>
+            </div>
+            <div style="color: #374151; font-size: 15px; line-height: 1.9; white-space: pre-wrap; background: rgba(255, 255, 255, 0.6); padding: 20px; border-radius: 10px;">
               ${propertyDetails}
             </div>
           </div>
 
-          <!-- Key Features -->
-          <div style="margin: 30px 0;">
-            <h3 style="margin: 0 0 15px; color: #1f2937; font-size: 18px; font-weight: 600;">
+          <!-- Personal Note -->
+          <div style="background: #f8fafc; border-radius: 12px; padding: 25px; margin: 30px 0; border: 2px dashed #e5e7eb;">
+            <p style="margin: 0; color: #4b5563; font-size: 15px; line-height: 1.7; font-style: italic;">
+              💡 <strong>Pro Tip:</strong> Properties in this area have shown consistent appreciation over the past few years. If you're interested, I'd recommend scheduling a site visit at your earliest convenience to experience it firsthand.
+            </p>
+          </div>
+
+          <!-- Enhanced Key Features -->
+          <div style="margin: 35px 0;">
+            <h3 style="margin: 0 0 20px; color: #1f2937; font-size: 20px; font-weight: 700; text-align: center;">
               Why Choose Us?
             </h3>
-            <ul style="margin: 0; padding-left: 20px; color: #4b5563; font-size: 15px; line-height: 1.8;">
-              <li style="margin-bottom: 8px;">✓ Prime locations with excellent connectivity</li>
-              <li style="margin-bottom: 8px;">✓ Transparent pricing with no hidden charges</li>
-              <li style="margin-bottom: 8px;">✓ Trusted builders with proven track record</li>
-              <li style="margin-bottom: 8px;">✓ Comprehensive legal documentation support</li>
-              <li style="margin-bottom: 0;">✓ Post-sale assistance and guidance</li>
-            </ul>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 24px; margin-bottom: 8px;">📍</div>
+                <p style="margin: 0; color: #374151; font-size: 13px; font-weight: 600;">Prime Locations</p>
+              </div>
+              <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 24px; margin-bottom: 8px;">💰</div>
+                <p style="margin: 0; color: #374151; font-size: 13px; font-weight: 600;">Transparent Pricing</p>
+              </div>
+              <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 24px; margin-bottom: 8px;">🏗️</div>
+                <p style="margin: 0; color: #374151; font-size: 13px; font-weight: 600;">Trusted Builders</p>
+              </div>
+              <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 24px; margin-bottom: 8px;">📋</div>
+                <p style="margin: 0; color: #374151; font-size: 13px; font-weight: 600;">Legal Support</p>
+              </div>
+            </div>
           </div>
 
-          <!-- Call to Action -->
-          <div style="background-color: #1f2937; border-radius: 8px; padding: 25px; margin: 30px 0; text-align: center;">
-            <p style="margin: 0 0 15px; color: #f3f4f6; font-size: 16px; font-weight: 500;">
-              Ready to take the next step?
-            </p>
-            <p style="margin: 0; color: #9ca3af; font-size: 14px;">
+          <!-- Call to Action with Enhanced Design -->
+          <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border-radius: 16px; padding: 35px; margin: 40px 0; text-align: center; box-shadow: 0 10px 30px rgba(31, 41, 55, 0.3);">
+            <div style="font-size: 40px; margin-bottom: 15px;">🎯</div>
+            <h3 style="margin: 0 0 12px; color: #fbbf24; font-size: 22px; font-weight: 700;">
+              Ready to Take the Next Step?
+            </h3>
+            <p style="margin: 0 0 20px; color: #d1d5db; font-size: 16px; line-height: 1.6;">
               Schedule a site visit or call us for more information
             </p>
+            <div style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 15px 35px; border-radius: 30px; color: #ffffff; font-weight: 700; font-size: 16px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);">
+              Book Your Site Visit →
+            </div>
           </div>
 
-          <!-- Signature -->
-          <div style="margin-top: 35px; padding-top: 25px; border-top: 2px solid #e5e7eb;">
+          <!-- Personalized Signature -->
+          <div style="margin-top: 40px; padding-top: 30px; border-top: 3px solid #f59e0b; text-align: center;">
             <p style="margin: 0; color: #374151; font-size: 16px; font-weight: 600;">
-              Best regards,
+              Looking forward to hearing from you!
             </p>
-            <p style="margin: 8px 0; color: #f59e0b; font-size: 18px; font-weight: 700;">
-              Aadhya
-            </p>
-            <p style="margin: 0; color: #6b7280; font-size: 14px;">
-              Property Consultant<br>
-              Real Estate Agency
-            </p>
+            <div style="margin: 20px 0;">
+              <p style="margin: 0; color: #f59e0b; font-size: 24px; font-weight: 800;">
+                Aadhya
+              </p>
+              <p style="margin: 8px 0 0; color: #6b7280; font-size: 14px;">
+                Property Consultant • Real Estate Agency
+              </p>
+              <div style="margin-top: 15px; color: #9ca3af; font-size: 13px;">
+                📞 +91 XXXXX XXXXX | ✉️ hello@realestateagency.com
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Footer -->
-        <div style="background-color: #1f2937; padding: 25px 30px; text-align: center;">
-          <p style="margin: 0; color: #9ca3af; font-size: 13px;">
+        <!-- Premium Footer -->
+        <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 35px 40px; text-align: center;">
+          <div style="margin-bottom: 15px;">
+            <span style="font-size: 20px; margin: 0 10px;">🏠</span>
+            <span style="font-size: 20px; margin: 0 10px;">🔑</span>
+            <span style="font-size: 20px; margin: 0 10px;">💼</span>
+          </div>
+          <p style="margin: 0; color: #9ca3af; font-size: 13px; font-weight: 500;">
             © ${new Date().getFullYear()} Real Estate Agency. All rights reserved.
           </p>
-          <p style="margin: 10px 0 0; color: #6b7280; font-size: 12px;">
+          <p style="margin: 12px 0 0; color: #6b7280; font-size: 12px;">
             This email was sent based on your conversation with our AI agent.
+          </p>
+          <p style="margin: 10px 0 0; color: #4b5563; font-size: 11px;">
+            Making your dream home a reality, one conversation at a time.
           </p>
         </div>
       </div>
