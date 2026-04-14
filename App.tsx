@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { GoogleGenAI, Modality, LiveServerMessage, Blob } from "@google/genai";
+import { GoogleGenAI, Modality, LiveServerMessage, Blob, Type } from "@google/genai";
 import { USE_CASES, LANGUAGES } from "./constants";
 import { Transcript, UseCase, Language, ConversationRecord } from "./types";
 import { decode, encode, decodeAudioData } from "./utils/audioUtils";
@@ -114,6 +114,137 @@ export default function App() {
   );
 }
 
+// Email Function Declaration for Gemini Live API
+const sendEmailFunctionDeclaration = {
+  name: "send_property_email",
+  description: "Send an email to a customer with property details and brochure. Use this when the customer requests property information via email or wants to receive details/brochure.",
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      customerEmail: {
+        type: Type.STRING,
+        description: "Customer's email address"
+      },
+      customerName: {
+        type: Type.STRING,
+        description: "Customer's name for personalization"
+      },
+      propertyDetails: {
+        type: Type.STRING,
+        description: "Details about the property (location, price, type, etc.)"
+      },
+      subject: {
+        type: Type.STRING,
+        description: "Email subject line"
+      },
+      includeBrochure: {
+        type: Type.BOOLEAN,
+        description: "Whether to attach property brochure"
+      }
+    },
+    required: ["customerEmail", "customerName", "propertyDetails", "subject"]
+  }
+};
+
+// Beautiful Email Body Generator
+function generateEmailBody(customerName: string, propertyDetails: string): string {
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Property Information</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
+      <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 40px 30px; text-align: center;">
+          <h1 style="margin: 0; color: #1f2937; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+            Real Estate Agency
+          </h1>
+          <p style="margin: 10px 0 0; color: #4b5563; font-size: 16px; font-weight: 500;">
+            Your Trusted Property Partner
+          </p>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 40px 30px;">
+          <!-- Greeting -->
+          <div style="margin-bottom: 30px;">
+            <p style="margin: 0; color: #374151; font-size: 18px; line-height: 1.6;">
+              Dear <strong style="color: #f59e0b;">${customerName}</strong>,
+            </p>
+            <p style="margin: 15px 0 0; color: #6b7280; font-size: 16px; line-height: 1.7;">
+              Thank you for your interest in our properties. As discussed, here are the detailed information about the property you're interested in:
+            </p>
+          </div>
+
+          <!-- Property Details Card -->
+          <div style="background: linear-gradient(to bottom right, #fef3c7, #fde68a); border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 4px solid #f59e0b;">
+            <h2 style="margin: 0 0 15px; color: #1f2937; font-size: 20px; font-weight: 600; display: flex; align-items: center;">
+              <span style="display: inline-block; width: 8px; height: 8px; background-color: #f59e0b; border-radius: 50%; margin-right: 10px;"></span>
+              Property Details
+            </h2>
+            <div style="color: #374151; font-size: 15px; line-height: 1.8; white-space: pre-wrap;">
+              ${propertyDetails}
+            </div>
+          </div>
+
+          <!-- Key Features -->
+          <div style="margin: 30px 0;">
+            <h3 style="margin: 0 0 15px; color: #1f2937; font-size: 18px; font-weight: 600;">
+              Why Choose Us?
+            </h3>
+            <ul style="margin: 0; padding-left: 20px; color: #4b5563; font-size: 15px; line-height: 1.8;">
+              <li style="margin-bottom: 8px;">✓ Prime locations with excellent connectivity</li>
+              <li style="margin-bottom: 8px;">✓ Transparent pricing with no hidden charges</li>
+              <li style="margin-bottom: 8px;">✓ Trusted builders with proven track record</li>
+              <li style="margin-bottom: 8px;">✓ Comprehensive legal documentation support</li>
+              <li style="margin-bottom: 0;">✓ Post-sale assistance and guidance</li>
+            </ul>
+          </div>
+
+          <!-- Call to Action -->
+          <div style="background-color: #1f2937; border-radius: 8px; padding: 25px; margin: 30px 0; text-align: center;">
+            <p style="margin: 0 0 15px; color: #f3f4f6; font-size: 16px; font-weight: 500;">
+              Ready to take the next step?
+            </p>
+            <p style="margin: 0; color: #9ca3af; font-size: 14px;">
+              Schedule a site visit or call us for more information
+            </p>
+          </div>
+
+          <!-- Signature -->
+          <div style="margin-top: 35px; padding-top: 25px; border-top: 2px solid #e5e7eb;">
+            <p style="margin: 0; color: #374151; font-size: 16px; font-weight: 600;">
+              Best regards,
+            </p>
+            <p style="margin: 8px 0; color: #f59e0b; font-size: 18px; font-weight: 700;">
+              Aadhya
+            </p>
+            <p style="margin: 0; color: #6b7280; font-size: 14px;">
+              Property Consultant<br>
+              Real Estate Agency
+            </p>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #1f2937; padding: 25px 30px; text-align: center;">
+          <p style="margin: 0; color: #9ca3af; font-size: 13px;">
+            © ${new Date().getFullYear()} Real Estate Agency. All rights reserved.
+          </p>
+          <p style="margin: 10px 0 0; color: #6b7280; font-size: 12px;">
+            This email was sent based on your conversation with our AI agent.
+          </p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 // Live Call View Component
 interface LiveCallViewProps {
   onSessionEnd: (record: ConversationRecord) => void;
@@ -189,14 +320,19 @@ const LiveCallView: React.FC<LiveCallViewProps> = ({ onSessionEnd }) => {
       });
       mediaStreamRef.current = stream;
 
+      const tools = [{ 
+        functionDeclarations: [sendEmailFunctionDeclaration] 
+      }];
+
       sessionPromiseRef.current = ai.live.connect({
         model: "gemini-2.5-flash-native-audio-preview-09-2025",
         config: {
           responseModalities: [Modality.AUDIO],
           inputAudioTranscription: {},
           outputAudioTranscription: {},
-          speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } } },
+          speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Erinome" } } },
           systemInstruction,
+          tools,
         },
         callbacks: {
           onopen: () => {
@@ -244,6 +380,66 @@ const LiveCallView: React.FC<LiveCallViewProps> = ({ onSessionEnd }) => {
               audioSourcesRef.current.forEach((source) => source.stop());
               audioSourcesRef.current.clear();
               nextStartTimeRef.current = 0;
+            }
+
+            // Handle tool calls
+            if (message.toolCall) {
+              console.log('Tool call received:', message.toolCall);
+              
+              const functionResponses = [];
+              
+              for (const fc of message.toolCall.functionCalls) {
+                if (fc.name === "send_property_email") {
+                  try {
+                    const args = fc.args as any;
+                    
+                    // Call backend API to send email
+                    const response = await fetch('/api/send-email', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                      to: args.customerEmail,
+                      subject: args.subject,
+                      body: generateEmailBody(args.customerName, args.propertyDetails),
+                      attachments: args.includeBrochure ? [{
+                        filename: 'property_brochure.pdf',
+                        content: '' // Base64 encoded brochure content would go here
+                      }] : undefined
+                      }),
+                    });
+                    
+                    const result = await response.json();
+                    
+                    functionResponses.push({
+                      id: fc.id,
+                      name: fc.name,
+                      response: { 
+                        success: result.success,
+                        message: result.message 
+                      }
+                    });
+                    
+                    console.log('Email sent successfully:', result);
+                  } catch (error) {
+                    console.error('Email tool error:', error);
+                    functionResponses.push({
+                      id: fc.id,
+                      name: fc.name,
+                      response: { 
+                        success: false, 
+                        error: 'Failed to send email' 
+                      }
+                    });
+                  }
+                }
+              }
+              
+              // Send tool response back to AI
+              sessionPromiseRef.current?.then((session) =>
+                session.sendToolResponse({ functionResponses })
+              );
+              
+              return;
             }
 
             if (message.serverContent?.inputTranscription) {
