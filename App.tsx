@@ -455,21 +455,35 @@ const LiveCallView: React.FC<LiveCallViewProps> = ({ onSessionEnd }) => {
                 if (fc.name === "send_property_email") {
                   try {
                     const args = fc.args as any;
+                    console.log('Email tool args:', args);
+                    
+                    const emailBody = generateEmailBody(args.customerName, args.propertyDetails);
+                    console.log('Email body generated, length:', emailBody.length);
+                    
+                    const requestBody = {
+                      to: args.customerEmail,
+                      subject: args.subject,
+                      body: emailBody,
+                      propertyIds: args.propertyIds,
+                      includeBrochure: args.includeBrochure || false
+                    };
+                    console.log('Sending to API:', { ...requestBody, body: '[BODY OMITTED]' });
                     
                     // Call backend API to send email
                     const response = await fetch('/api/send-email', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        to: args.customerEmail,
-                        subject: args.subject,
-                        body: generateEmailBody(args.customerName, args.propertyDetails),
-                        propertyIds: args.propertyIds,
-                        includeBrochure: args.includeBrochure || false
-                      }),
+                      body: JSON.stringify(requestBody),
                     });
                     
+                    console.log('API response status:', response.status);
+                    
                     const result = await response.json();
+                    console.log('API response result:', result);
+                    
+                    if (!response.ok) {
+                      throw new Error(result.error || result.details || `HTTP ${response.status}`);
+                    }
                     
                     functionResponses.push({
                       id: fc.id,
@@ -484,12 +498,14 @@ const LiveCallView: React.FC<LiveCallViewProps> = ({ onSessionEnd }) => {
                     console.log('Email sent successfully:', result);
                   } catch (error) {
                     console.error('Email tool error:', error);
+                    const errorMessage = error instanceof Error ? error.message : 'Failed to send email';
+                    console.error('Error details:', errorMessage);
                     functionResponses.push({
                       id: fc.id,
                       name: fc.name,
                       response: { 
                         success: false, 
-                        error: 'Failed to send email' 
+                        error: errorMessage 
                       }
                     });
                   }
