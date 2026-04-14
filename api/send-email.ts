@@ -76,6 +76,7 @@ export default async function handler(req: any, res: any) {
 
     // Generate brochure if requested with property IDs
     let finalAttachments = attachments || [];
+    let brochureGenerationFailed = false;
     
     if (includeBrochure && propertyIds && propertyIds.length > 0) {
       console.log('Brochure generation requested for property IDs:', propertyIds);
@@ -91,10 +92,10 @@ export default async function handler(req: any, res: any) {
           let filename: string;
           
           if (properties.length === 1) {
-            brochureBase64 = generatePropertyBrochure(properties[0]);
+            brochureBase64 = await generatePropertyBrochure(properties[0]);
             filename = `${properties[0].title.replace(/\s+/g, '_')}_Brochure.pdf`;
           } else {
-            brochureBase64 = generateMultiPropertyBrochure(properties);
+            brochureBase64 = await generateMultiPropertyBrochure(properties);
             filename = 'Property_Portfolio_Brochure.pdf';
           }
           
@@ -109,6 +110,7 @@ export default async function handler(req: any, res: any) {
         }
       } catch (brochureError) {
         console.error('Brochure generation failed:', brochureError);
+        brochureGenerationFailed = true;
         // Continue without brochure if generation fails
       }
     }
@@ -126,6 +128,8 @@ export default async function handler(req: any, res: any) {
     };
 
     console.log('Sending email to:', to);
+    console.log('Brochure generation failed:', brochureGenerationFailed);
+    
     const info = await transporter.sendMail(mailOptions);
     
     console.log('Email sent successfully:', info.messageId);
@@ -133,14 +137,16 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({ 
       success: true, 
       messageId: info.messageId,
-      message: 'Email sent successfully',
-      brochureIncluded: finalAttachments.length > (attachments?.length || 0)
+      message: brochureGenerationFailed ? 'Email sent successfully (brochure not included due to technical issue)' : 'Email sent successfully',
+      brochureIncluded: finalAttachments.length > (attachments?.length || 0),
+      brochureGenerationFailed
     });
 
   } catch (error) {
     console.error('Email sending error:', error);
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
     console.error('Error message:', message);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     return res.status(500).json({ error: 'Failed to send email', details: message });
   }
 }

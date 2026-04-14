@@ -478,7 +478,16 @@ const LiveCallView: React.FC<LiveCallViewProps> = ({ onSessionEnd }) => {
                     
                     console.log('API response status:', response.status);
                     
-                    const result = await response.json();
+                    let result;
+                    try {
+                      const responseText = await response.text();
+                      console.log('API response text (first 200 chars):', responseText.substring(0, 200));
+                      result = JSON.parse(responseText);
+                    } catch (parseError) {
+                      console.error('Failed to parse JSON response:', parseError);
+                      const responseText = await response.text();
+                      throw new Error(`Server returned non-JSON response: ${responseText.substring(0, 200)}...`);
+                    }
                     console.log('API response result:', result);
                     
                     if (!response.ok) {
