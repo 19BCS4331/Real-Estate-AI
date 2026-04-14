@@ -1,5 +1,7 @@
 
 import nodemailer from 'nodemailer';
+import { generatePropertyBrochure, generateMultiPropertyBrochure } from '../utils/pdfGenerator';
+import { PROPERTY_LISTINGS, getPropertyById } from '../properties';
 
 interface EmailRequest {
   to: string;
@@ -9,6 +11,8 @@ interface EmailRequest {
     filename: string;
     content: string;
   }>;
+  propertyIds?: string[]; // IDs of properties to include in brochure
+  includeBrochure?: boolean; // Whether to generate and attach brochure
 }
 
 export default async function handler(req: any, res: any) {
@@ -18,7 +22,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { to, subject, body, attachments }: EmailRequest = req.body;
+    const { to, subject, body, attachments, propertyIds, includeBrochure }: EmailRequest = req.body;
 
     if (!to || !subject || !body) {
       return res.status(400).json({ error: 'Missing required fields: to, subject, body' });
@@ -50,12 +54,46 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'SMTP configuration error. Please check your credentials.' });
     }
 
+    // Generate brochure if requested with property IDs
+    let finalAttachments = attachments || [];
+    
+    if (includeBrochure && propertyIds && propertyIds.length > 0) {
+      try {
+        const properties = propertyIds
+          .map(id => getPropertyById(id))
+          .filter(p => p !== undefined);
+        
+        if (properties.length > 0) {
+          let brochureBase64: string;
+          let filename: string;
+          
+          if (properties.length === 1) {
+            brochureBase64 = generatePropertyBrochure(properties[0]);
+            filename = `${properties[0].title.replace(/\s+/g, '_')}_Brochure.pdf`;
+          } else {
+            brochureBase64 = generateMultiPropertyBrochure(properties);
+            filename = 'Property_Portfolio_Brochure.pdf';
+          }
+          
+          finalAttachments.push({
+            filename,
+            content: brochureBase64
+          });
+          
+          console.log(`Generated brochure for ${properties.length} property/properties`);
+        }
+      } catch (brochureError) {
+        console.error('Brochure generation failed:', brochureError);
+        // Continue without brochure if generation fails
+      }
+    }
+
     const mailOptions = {
       from: process.env.ZOHO_EMAIL,
       to,
       subject,
       html: body,
-      attachments: attachments?.map(att => ({
+      attachments: finalAttachments.map(att => ({
         filename: att.filename,
         content: att.content,
         encoding: 'base64',
@@ -69,7 +107,8 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({ 
       success: true, 
       messageId: info.messageId,
-      message: 'Email sent successfully' 
+      message: 'Email sent successfully',
+      brochureIncluded: finalAttachments.length > (attachments?.length || 0)
     });
 
   } catch (error) {

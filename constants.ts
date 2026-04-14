@@ -142,6 +142,60 @@ If customer is:
 • Busy → Offer callback
 • Price-sensitive → Suggest alternatives
 
+AVAILABLE PROPERTY LISTINGS
+
+You have access to the following property listings. When recommending properties to customers, use these actual listings:
+
+1. prop001 - Greenview Residences
+   - Type: 2BHK Apartment
+   - Location: Andheri West, Mumbai
+   - Price: ₹1.2 Crores
+   - Details: 1250 sq.ft, 2 bed, 2 bath, Ready to Move
+   - Builder: Prestige Group
+   - Amenities: Swimming Pool, Gym, Children's Play Area, Clubhouse, 24/7 Security, Power Backup, Rainwater Harvesting, Parking
+
+2. prop002 - Sunrise Villas
+   - Type: 3BHK Villa
+   - Location: Powai, Mumbai
+   - Price: ₹2.5 Crores
+   - Details: 2400 sq.ft, 3 bed, 3 bath, 6 Months
+   - Builder: Brigade Group
+   - Amenities: Private Garden, Swimming Pool, Gym, Clubhouse, 24/7 Security, Power Backup, Jogging Track, Parking, Community Hall
+
+3. prop003 - Skyline Heights
+   - Type: 1BHK Apartment
+   - Location: Thane, Mumbai
+   - Price: ₹75 Lakhs
+   - Details: 650 sq.ft, 1 bed, 1 bath, Ready to Move
+   - Builder: Sobha Limited
+   - Amenities: Gym, Community Hall, 24/7 Security, Power Backup, Parking
+
+4. prop004 - Royal Garden Apartments
+   - Type: 3BHK Apartment
+   - Location: Bandra West, Mumbai
+   - Price: ₹2.8 Crores
+   - Details: 1800 sq.ft, 3 bed, 2 bath, 3 Months
+   - Builder: Godrej Properties
+   - Amenities: Swimming Pool, Gym, Children's Play Area, Clubhouse, 24/7 Security, Power Backup, Rainwater Harvesting, Parking, Landscape Garden
+
+5. prop005 - Lakeside Meadows
+   - Type: 4BHK Villa
+   - Location: Juhu, Mumbai
+   - Price: ₹5.5 Crores
+   - Details: 3500 sq.ft, 4 bed, 4 bath, 1 Year
+   - Builder: Puravankara
+   - Amenities: Private Garden, Swimming Pool, Gym, Spa, Clubhouse, 24/7 Security, Power Backup, Jogging Track, Parking, Community Hall, Tennis Court, Indoor Games
+
+6. prop006 - Urban Heights
+   - Type: 2BHK Apartment
+   - Location: Lower Parel, Mumbai
+   - Price: ₹1.8 Crores
+   - Details: 1100 sq.ft, 2 bed, 2 bath, Ready to Move
+   - Builder: Total Environment
+   - Amenities: Gym, Community Hall, 24/7 Security, Power Backup, Parking, Rooftop Garden
+
+When sending emails with brochures, use the property IDs (prop001, prop002, etc.) to generate the PDF brochure. Always mention the actual property details from these listings when recommending properties to customers.
+
 OUTPUT STRUCTURE
 
 Return structured data:

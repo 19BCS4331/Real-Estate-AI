@@ -133,13 +133,20 @@ const sendEmailFunctionDeclaration = {
         type: Type.STRING,
         description: "Details about the property (location, price, type, etc.)"
       },
+      propertyIds: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.STRING
+        },
+        description: "Array of property IDs to include in the brochure (e.g., ['prop001', 'prop002']). Use the IDs from the property listings."
+      },
       subject: {
         type: Type.STRING,
         description: "Email subject line"
       },
       includeBrochure: {
         type: Type.BOOLEAN,
-        description: "Whether to attach property brochure"
+        description: "Whether to attach property brochure PDF"
       }
     },
     required: ["customerEmail", "customerName", "propertyDetails", "subject"]
@@ -398,13 +405,11 @@ const LiveCallView: React.FC<LiveCallViewProps> = ({ onSessionEnd }) => {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({
-                      to: args.customerEmail,
-                      subject: args.subject,
-                      body: generateEmailBody(args.customerName, args.propertyDetails),
-                      attachments: args.includeBrochure ? [{
-                        filename: 'property_brochure.pdf',
-                        content: '' // Base64 encoded brochure content would go here
-                      }] : undefined
+                        to: args.customerEmail,
+                        subject: args.subject,
+                        body: generateEmailBody(args.customerName, args.propertyDetails),
+                        propertyIds: args.propertyIds,
+                        includeBrochure: args.includeBrochure || false
                       }),
                     });
                     
@@ -415,7 +420,8 @@ const LiveCallView: React.FC<LiveCallViewProps> = ({ onSessionEnd }) => {
                       name: fc.name,
                       response: { 
                         success: result.success,
-                        message: result.message 
+                        message: result.message,
+                        brochureIncluded: result.brochureIncluded
                       }
                     });
                     
