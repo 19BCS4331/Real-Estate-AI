@@ -107,6 +107,10 @@ customerName
 propertyDetails
 subject
 includeBrochure (true/false)
+propertyIds (array of property IDs like ["prop001"])
+
+CRITICAL RULE: You MUST always call the send_property_email tool to send emails. NEVER claim to have sent an email without actually calling the tool. After the tool executes successfully, then confirm to the customer.
+
 After calling the tool, confirm clearly:
 Email has been sent
 What was included (details, brochure, etc.)
